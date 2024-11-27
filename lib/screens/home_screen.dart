@@ -10,14 +10,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int totalSeconds = 1500;
+  static const int setTotalSeconds = 10;
+
+  int seconds = setTotalSeconds;
+  int completePomodors = 0;
+
   bool isPlaying = false;
   late Timer timer;
 
   onTick(Timer timer) {
-    setState(() {
-      totalSeconds = totalSeconds - 1;
-    });
+    if (seconds == 0) {
+      setState(() {
+        seconds = setTotalSeconds;
+        isPlaying = false;
+        timer.cancel();
+        completePomodors = completePomodors + 1;
+      });
+    } else {
+      setState(() {
+        seconds = seconds - 1;
+      });
+    }
   }
 
   onPressedButton() {
@@ -32,6 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String formattedSeconds() {
+    return Duration(seconds: seconds).toString().split('.')[0].substring(2, 7);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 alignment: Alignment.bottomCenter,
                 child: Text(
-                  '$totalSeconds',
+                  formattedSeconds(),
                   style: TextStyle(
                     color: Theme.of(context).cardColor,
                     fontSize: 100,
@@ -93,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          '0',
+                          '$completePomodors',
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.w700,
