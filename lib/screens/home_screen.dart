@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  onPressedButton() {
+  onPressedPlayButton() {
     if (!isPlaying) {
       timer = Timer.periodic(const Duration(seconds: 1), onTick);
     } else {
@@ -42,6 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     setState(() {
       isPlaying = !isPlaying;
+    });
+  }
+
+  onPressedStopButton() {
+    setState(() {
+      if (isPlaying) {
+        timer.cancel();
+        isPlaying = false;
+      }
+      seconds = setTotalSeconds;
     });
   }
 
@@ -73,15 +83,31 @@ class _HomeScreenState extends State<HomeScreen> {
             Flexible(
               flex: 4,
               child: Center(
-                child: IconButton(
-                  onPressed: () => {onPressedButton()},
-                  color: Theme.of(context).cardColor,
-                  icon: Icon(
-                    isPlaying
-                        ? Icons.pause_circle_outline
-                        : Icons.play_circle_outline_rounded,
-                    size: 150,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () => {onPressedPlayButton()},
+                      color: Theme.of(context).cardColor,
+                      icon: Icon(
+                        isPlaying
+                            ? Icons.pause_circle_outline
+                            : Icons.play_circle_outline_rounded,
+                        size: 120,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    IconButton(
+                      onPressed: () => {onPressedStopButton()},
+                      color: Theme.of(context).cardColor,
+                      icon: const Icon(
+                        Icons.stop_circle_outlined,
+                        size: 120,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
